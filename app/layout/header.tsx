@@ -45,8 +45,18 @@ export default function Header() {
     return (
         <header className="border-b border-blue-200 bg-blue-100 p-4 shadow-sm">
             <div className="container mx-auto flex items-center justify-between">
-                <h1 className="text-xl font-bold text-blue-900">
-                    <Link href="/">図書管理システム</Link>
+                <h1>
+                    <Link
+                        href="/"
+                        className="flex items-center gap-3 text-xl font-bold text-blue-900"
+                    >
+                        <img
+                            src="/icons/bookstand.svg"
+                            alt="図書管理システムアイコン"
+                            className="h-8 w-8"
+                        />
+                        <span>図書管理システム</span>
+                    </Link>
                 </h1>
 
                 <NavigationMenu>
