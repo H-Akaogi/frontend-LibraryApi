@@ -9,12 +9,13 @@ import { BookRepository } from "@/infrastructures/BookRepository";
 import { RegisterUserService } from "@/services/RegisterUserService";
 import { IUserRepository } from "@/interfaces/IUserRepository";
 import { UserRepository } from "@/infrastructures/UserRepository";
-
+*/
 import { IBookCategoryRepository } from "@/interfaces/IBookCategoryRepository";
 import { BookCategoryRepository } from "@/infrastructures/BookCategoryRepository";
+
 import { IRegisterBookService } from "@/interfaces/IRegisterBookService";
 import { RegisterBookService } from "@/services/RegisterBookService";
-*/
+
 /**
  * 演習 6-2 データアクセスとサービスを実装する
  * DIコンテナの初期化と依存関係の登録
@@ -46,11 +47,11 @@ container.bind<ISearchBookService>(TYPES.ISearchBookService).to(SearchBookServic
 /**
  * 演習 8-9 リポジトリの実装を作成する
  */
-// container.bind<IBookCategoryRepository>(TYPES.IBookCategoryRepository).to(BookCategoryRepository);
+container.bind<IBookCategoryRepository>(TYPES.IBookCategoryRepository).to(BookCategoryRepository);
 
 /**
  * 演習 8-10 図書登録サービスを実装してDIコンテナに登録する
  */
-// container.bind<IRegisterBookService>(TYPES.IRegisterBookService).to(RegisterBookService);
+container.bind<IRegisterBookService>(TYPES.IRegisterBookService).to(RegisterBookService);
 
 export { container };

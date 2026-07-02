@@ -3,6 +3,6 @@
  * 分類インターフェイス
  */
 export interface BookCategory {
-    categoryUuid: string;  // 分類Id(UUID)
+    categoryId: string;  // 分類Id(UUID)
     name: string;          // 分類名
 }

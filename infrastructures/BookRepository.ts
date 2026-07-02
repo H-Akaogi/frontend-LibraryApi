@@ -1,6 +1,7 @@
 import { IBookRepository } from "@/interfaces/IBookRepository";
 import { Book } from "@/models/Book";
 import { injectable } from "inversify";
+import { BookRegistration } from "@/models/BookRegistation";
 // import { getSession } from "next-auth/react";
 /**
  * バックエンドから返ってくる図書データの型
@@ -72,5 +73,71 @@ export class BookRepository implements IBookRepository {
             stock: book.stock,
         }));
         return books;
+    }
+    /**
+     * 演習 8-9 リポジトリの実装を作成する
+     * 図書の重複を検証する
+     * @param name 検証する図書名
+     */
+    /**
+     * 演習 8-9 リポジトリの実装を作成する
+     * 図書の重複を検証する
+     * @param name 検証する図書名
+     */
+    async existsByName(name: string): Promise<void> {
+        //const session = await getSession();
+        //const token = (session as any)?.user?.token;
+        const params = new URLSearchParams({ bookName: name });
+        const response = await fetch(`/proxy-api/library/api/books/register/validate?${params.toString()}`, {
+            method: "GET",
+            headers: {
+                //"Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            if (errorData.message) {
+                throw new Error(errorData.message);
+            }
+            if (errorData.errors) {
+                const messages = Object.values(errorData.errors).flat().join("\n");
+                throw new Error(messages);
+            }
+            throw new Error("図書名の検証に失敗しました。");
+        }
+    }
+
+    /**
+     * 演習 8-9 リポジトリの実装を作成する
+     * 図書を登録する
+     * @param book 登録する図書
+     * @returns 登録された図書（非同期）
+     */
+    async register(book: BookRegistration): Promise<Book> {
+        //const session = await getSession();
+        //const token = (session as any)?.user?.token;
+        const response = await fetch("/proxy-api/library/api/books", {
+            method: "POST",
+            headers: {
+                //"Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(book) // DTOをJSON文字列に変換して送信する
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            if (errorData.message) {
+                throw new Error(errorData.message);
+            }
+            if (errorData.errors) {
+                const messages = Object.values(errorData.errors).flat().join("\n");
+                throw new Error(messages);
+            }
+            throw new Error(`図書の登録に失敗しました (Status: ${response.status})`);
+        }
+        // 登録完了後、バックエンドから返却された完全な図書データ(UUID含む)を返す
+        return await response.json();
     }
 }
