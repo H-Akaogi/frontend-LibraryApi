@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -21,11 +22,29 @@ export const BookSearch = () => {
 
     // 検索ボックスに入力されたキーワード文字列を保持するローカルState
     const [keyword, setKeyword] = useState<string>("");
+    // バリデーションエラーを保持するState
+    const [validationError, setValidationError] = useState<string>("");
     // カスタムフックから検索結果(books)、ローディング状態(isLoading)、エラー状態(error)、検索実行関数(search)を取得する
     const { books, isLoading, error, search } = useSearchBook();
     // 検索ボタンのクリックイベントハンドラ
+    // 検索ボタンのクリックイベントハンドラ
     const handleSearchClick = () => {
-        // 入力されているキーワードを引数に渡し、実際の検索処理(ユースケース)を実行する
+        // 前回のバリデーションエラーをクリア
+        setValidationError("");
+
+        // 空文字チェック
+        if (!keyword.trim()) {
+            setValidationError("検索キーワードを入力してください。");
+            return;
+        }
+
+        // 文字数チェック
+        if (keyword.length > 50) {
+            setValidationError("検索キーワードは50文字以内で入力してください。");
+            return;
+        }
+
+        // 入力されているキーワードを引数に渡し、実際の検索処理を実行する
         search(keyword);
     };
 
@@ -35,37 +54,71 @@ export const BookSearch = () => {
     return (
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-sm border border-border">
             <h2 className="text-2xl font-bold text-foreground mb-6 text-center border-b pb-4">
-                図書キーワード検索
+                図書検索
             </h2>
+            {/* エラーメッセージ */}
+            <div className="space-y-3 mb-6">
+                {validationError && (
+                    <CommonAlert message={validationError} />
+                )}
 
-            {/* 検索入力エリア */}
-            <div className="flex justify-center items-center gap-4 mb-8">
-                <Input
-                    type="text"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="書名を入力..."
-                    className="max-w-sm"
-                />
-                <Button
-                    onClick={handleSearchClick}
-                    disabled={isLoading}
-                    className="px-8"
-                >
-                    {isLoading ? "検索中..." : "検索"}
-                </Button>
+                {error && (
+                    <CommonAlert message={`検索処理中にエラーが発生しました。${error}`} />
+                )}
             </div>
 
-            {/* エラーメッセージを表示する */}
-            {error && (
-                <CommonAlert
-                    title="エラー"
-                    message={error}
-                />
-            )}
+            {/* 検索入力エリア */}
+            <div className="mb-10">
+                <div className="max-w-2xl mx-auto space-y-2">
+                    <Label htmlFor="bookKeyword" className="font-medium">
+                        書名キーワード
+                    </Label>
+
+                    <div className="flex gap-3">
+                        <Input
+                            id="bookKeyword"
+                            type="text"
+                            value={keyword}
+                            onChange={(e) => {
+                                setKeyword(e.target.value);
+
+                                if (validationError) {
+                                    setValidationError("");
+                                }
+                            }}
+                            placeholder="例：React、TypeScript、設計"
+                            className="flex-1 h-12 text-lg"
+                        />
+
+                        <Button
+                            onClick={handleSearchClick}
+                            disabled={isLoading}
+                            className="px-8 h-12"
+                        >
+                            {isLoading ? "検索中..." : "検索"}
+                        </Button>
+                    </div>
+
+                    <p
+                        className={`text-left text-sm ${keyword.length > 50
+                            ? "text-red-500"
+                            : "text-muted-foreground"
+                            }`}
+                    >
+                        50文字以内で入力してください ({keyword.length}/50)
+                    </p>
+                </div>
+            </div>
+
 
             {/* 検索結果の表示エリア */}
-            <div>
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+
+                    <p className="text-sm text-muted-foreground">
+                        検索結果：{books.length}件
+                    </p>
+                </div>
                 {/* 図書が見つからない場合のメッセージ */}
                 {books.length === 0 && !isLoading && (
                     <p className="text-center text-muted-foreground py-4">

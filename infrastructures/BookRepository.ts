@@ -38,10 +38,10 @@ export class BookRepository implements IBookRepository {
         // API呼び出し(next.config.tsで設定したプロキシ経由)
         const response = await fetch(`/proxy-api/library/api/books?${params.toString()}`, {
             method: "GET",
-            /*headers: {
-                "Authorization": `Bearer ${token}`,
+            headers: {
+                //"Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
-            }*/
+            }
         });
 
         // ステータスコードに応じたエラーハンドリング
