@@ -69,7 +69,7 @@ export const BookSearch = () => {
                 {/* 図書が見つからない場合のメッセージ */}
                 {books.length === 0 && !isLoading && (
                     <p className="text-center text-muted-foreground py-4">
-                        図書が見つかりません。検索ボタンを押してください。
+                        該当する図書が見つかりませんでした。
                     </p>
                 )}
 
@@ -100,7 +100,7 @@ export const BookSearch = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {book.stock.stock} <span className="text-muted-foreground text-xs">冊</span>
+                                            {book.stock} <span className="text-muted-foreground text-xs">冊</span>
                                         </TableCell>
                                     </TableRow>
                                 ))}

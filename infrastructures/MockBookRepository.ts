@@ -14,22 +14,22 @@ export class MockBookRepository implements IBookRepository {
             bookUuid: "b-001",
             title: "プログラミング入門",
             author: "山田太郎",
-            category: { categoryUuid: "c-001", name: "技術書" },
-            stock: { stockUuid: "s-001", stock: 3 }
+            category: { categoryId: "c-001", name: "技術書" },
+            stock: 3
         },
         {
             bookUuid: "b-002",
             title: "データベース設計入門",
             author: "佐藤花子",
-            category: { categoryUuid: "c-001", name: "技術書" },
-            stock: { stockUuid: "s-002", stock: 5 }
+            category: { categoryId: "c-001", name: "技術書" },
+            stock: 5
         },
         {
             bookUuid: "b-003",
             title: "JavaScript実践ガイド",
             author: "鈴木一郎",
-            category: { categoryUuid: "c-001", name: "技術書" },
-            stock: { stockUuid: "s-003", stock: 2 }
+            category: { categoryId: "c-001", name: "技術書" },
+            stock: 2
         }
     ];
 

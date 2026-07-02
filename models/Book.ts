@@ -8,6 +8,9 @@ export interface Book {
     bookUuid: string;        // 図書Id(UUID)
     title: string;               // 書名
     author: string;              // 著者名
-    category: BookCategory;  // 分類
-    stock: BookStock;        // 蔵書数
+    category: {
+        categoryId: string;
+        name: string;
+    };
+    stock: number;
 }
