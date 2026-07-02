@@ -55,7 +55,9 @@ export class RegisterBookService implements IRegisterBookService {
      * @param book 登録する図書データ
      * @return 登録された図書（非同期）
      */
-    async execute(book: BookRegistration): Promise<Book> {
+    public async execute(book: BookRegistration): Promise<Book> {
+        await this.bookRepository.existsByName(book.title);
+
         return await this.bookRepository.register(book);
     }
 }

@@ -15,7 +15,8 @@ import { BookCategoryRepository } from "@/infrastructures/BookCategoryRepository
 
 import { IRegisterBookService } from "@/interfaces/IRegisterBookService";
 import { RegisterBookService } from "@/services/RegisterBookService";
-
+import { IChangeBookService } from "@/interfaces/IChangeBookService";
+import { ChangeBookService } from "@/services/ChangeBookService";
 /**
  * 演習 6-2 データアクセスとサービスを実装する
  * DIコンテナの初期化と依存関係の登録
@@ -53,5 +54,9 @@ container.bind<IBookCategoryRepository>(TYPES.IBookCategoryRepository).to(BookCa
  * 演習 8-10 図書登録サービスを実装してDIコンテナに登録する
  */
 container.bind<IRegisterBookService>(TYPES.IRegisterBookService).to(RegisterBookService);
+/**
+ * 図書変更
+ */
+container.bind<IChangeBookService>(TYPES.IChangeBookService).to(ChangeBookService);
 
 export { container };

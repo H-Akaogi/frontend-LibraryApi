@@ -5,7 +5,7 @@ import { BookStock } from "./BookStock";
  * 図書インターフェイス
  */
 export interface Book {
-    bookUuid: string;        // 図書Id(UUID)
+    bookId: string;        // 図書Id(UUID)
     title: string;               // 書名
     author: string;              // 著者名
     category: {

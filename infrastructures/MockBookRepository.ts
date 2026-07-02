@@ -1,15 +1,16 @@
 import { injectable } from "inversify";
 import { IBookRepository } from "../interfaces/IBookRepository";
 import { Book } from "../models/Book";
+import { BookRegistration } from "../models/BookRegistation";
+
 /**
  * 演習 6-2 データアクセスとサービスを実装する
  * 図書リポジトリの実装(モック)
  */
 @injectable()
 export class MockBookRepository implements IBookRepository {
-
     // テスト用のダミーデータ（モックデータ）を準備
-    private readonly mockBooks: Book[] = [
+    private mockBooks: Book[] = [
         {
             bookUuid: "b-001",
             title: "プログラミング入門",
@@ -39,15 +40,48 @@ export class MockBookRepository implements IBookRepository {
      * @returns 検索にヒットした図書のリスト(非同期)
      */
     public async searchKeyword(keyword: string): Promise<Book[]> {
-        // キーワードが空の場合は、全件を返す
         if (!keyword) {
             return this.mockBooks;
         }
-        // キーワードが図書名(name)に含まれているものをフィルタリングする
+
         const filteredBooks = this.mockBooks.filter(book =>
             book.title.includes(keyword)
         );
-        // asyncメソッドなので、自動的にPromiseでラップされて返却される
+
         return filteredBooks;
+    }
+
+    /**
+     * 図書名の重複を検証する
+     * @param name 検証する図書名
+     */
+    public async existsByName(name: string): Promise<void> {
+        const exists = this.mockBooks.some(book => book.title === name);
+
+        if (exists) {
+            throw new Error("同じ書名の図書が既に登録されています。");
+        }
+    }
+
+    /**
+     * 図書を登録する
+     * @param book 登録する図書
+     * @returns 登録された図書
+     */
+    public async register(book: BookRegistration): Promise<Book> {
+        const newBook: Book = {
+            bookUuid: crypto.randomUUID(),
+            title: book.title,
+            author: book.author,
+            category: {
+                categoryId: book.categoryId,
+                name: "未設定"
+            },
+            stock: book.stock
+        };
+
+        this.mockBooks.push(newBook);
+
+        return newBook;
     }
 }

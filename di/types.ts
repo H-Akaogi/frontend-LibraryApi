@@ -19,6 +19,10 @@ export const TYPES = {
     /**
      * 演習 8-10 図書登録サービスを実装してDIコンテナに登録する
      */
-    IRegisterBookService: Symbol.for("IRegisterBookService")
+    IRegisterBookService: Symbol.for("IRegisterBookService"),
+    /**
+     * 図書変更
+     */
+    IChangeBookService: Symbol.for("IChangeBookService")
 
 };

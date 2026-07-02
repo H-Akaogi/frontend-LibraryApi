@@ -2,6 +2,7 @@ import { IBookRepository } from "@/interfaces/IBookRepository";
 import { Book } from "@/models/Book";
 import { injectable } from "inversify";
 import { BookRegistration } from "@/models/BookRegistation";
+import { BookChange } from "@/models/BookChange";
 // import { getSession } from "next-auth/react";
 /**
  * バックエンドから返ってくる図書データの型
@@ -63,7 +64,7 @@ export class BookRepository implements IBookRepository {
         const data: BookResponse[] = await response.json();
         // バックエンドの形をフロント側のBook型に変換する
         const books: Book[] = data.map((book) => ({
-            bookUuid: book.bookId,
+            bookId: book.bookId,
             title: book.title,
             author: book.author,
             category: {
@@ -74,11 +75,6 @@ export class BookRepository implements IBookRepository {
         }));
         return books;
     }
-    /**
-     * 演習 8-9 リポジトリの実装を作成する
-     * 図書の重複を検証する
-     * @param name 検証する図書名
-     */
     /**
      * 演習 8-9 リポジトリの実装を作成する
      * 図書の重複を検証する
@@ -136,6 +132,79 @@ export class BookRepository implements IBookRepository {
                 throw new Error(messages);
             }
             throw new Error(`図書の登録に失敗しました (Status: ${response.status})`);
+        }
+        // 登録完了後、バックエンドから返却された完全な図書データ(UUID含む)を返す
+        return await response.json();
+    }
+
+    /**
+     * 図書変更
+     */
+    /**
+     * IDからBookを取得
+     * @param bookId
+     * @returns 
+     */
+    public async getById(bookId: string): Promise<Book> {
+        const response = await fetch(`/proxy-api/library/api/books/${bookId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+
+            if (errorData.message) {
+                throw new Error(errorData.message);
+            }
+
+            if (errorData.errors) {
+                const messages = Object.values(errorData.errors).flat().join("\n");
+                throw new Error(messages);
+            }
+
+            throw new Error(`図書の取得に失敗しました (Status: ${response.status})`);
+        }
+
+        const data: BookResponse = await response.json();
+
+        return {
+            bookId: data.bookId,
+            title: data.title,
+            author: data.author,
+            category: {
+                categoryId: data.category.categoryId,
+                name: data.category.name,
+            },
+            stock: data.stock,
+        };
+    }
+    /**
+     * 変更
+     * @param book 
+     * @returns 
+     */
+    public async change(book: BookChange): Promise<Book> {
+        const response = await fetch(`/proxy-api/library/api/books/${book.bookId}`, {
+            method: "PUT",
+            headers: {
+                //"Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(book) // DTOをJSON文字列に変換して送信する
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            if (errorData.message) {
+                throw new Error(errorData.message);
+            }
+            if (errorData.errors) {
+                const messages = Object.values(errorData.errors).flat().join("\n");
+                throw new Error(messages);
+            }
+            throw new Error(`図書の変更に失敗しました (Status: ${response.status})`);
         }
         // 登録完了後、バックエンドから返却された完全な図書データ(UUID含む)を返す
         return await response.json();

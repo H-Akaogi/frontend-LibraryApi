@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { CommonAlert } from "@/components/common/CommonAlert";
 import {
     Table,
     TableBody,
@@ -11,15 +12,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useSearchBook } from "../hooks/useSearchBook";
 import { AlertCircle } from "lucide-react";
-import { CommonAlert } from "@/components/common/CommonAlert";
-/**
- * 演習 8-7 バックエンドにアクセスするリポジトリを実装して切り替える
- * ユーザーからの入力を受け付け、カスタムフック経由で検索処理を呼び出す
- */
-export const BookSearch = () => {
+import { useSearchBook } from "@/components/hooks/useSearchBook";
+import { useRouter } from "next/navigation";
 
+export const BookGetById = () => {
+    const router = useRouter();
     // 検索ボックスに入力されたキーワード文字列を保持するローカルState
     const [keyword, setKeyword] = useState<string>("");
     // バリデーションエラーを保持するState
@@ -47,15 +45,12 @@ export const BookSearch = () => {
         // 入力されているキーワードを引数に渡し、実際の検索処理を実行する
         search(keyword);
     };
-
-    /**
-     * UIを構成するコンポーネントを返す
-     */
     return (
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-sm border border-border">
             <h2 className="text-2xl font-bold text-foreground mb-6 text-center border-b pb-4">
-                図書検索
+                図書変更
             </h2>
+            <p>変更する図書を検索して選択してください。</p>
             {/* エラーメッセージ */}
             <div className="space-y-3 mb-6">
                 {validationError && (
@@ -136,6 +131,7 @@ export const BookSearch = () => {
                                     <TableHead className="font-semibold text-foreground text-right">著者名</TableHead>
                                     <TableHead className="font-semibold text-foreground text-center">分類</TableHead>
                                     <TableHead className="font-semibold text-foreground text-right">蔵書数</TableHead>
+                                    <TableHead className="font-semibold text-foreground text-right">操作</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -154,6 +150,17 @@ export const BookSearch = () => {
                                         </TableCell>
                                         <TableCell className="text-right">
                                             {book.stock} <span className="text-muted-foreground text-xs">冊</span>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                className="flex-1 h-10"
+                                                disabled={isLoading}
+                                                onClick={() => router.push(`/books/edit/${book.bookId}`)}
+                                            >
+                                                選択
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

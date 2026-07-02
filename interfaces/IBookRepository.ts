@@ -1,5 +1,6 @@
 import { Book } from "../models/Book";
 import { BookRegistration } from "@/models/BookRegistation";
+import { BookChange } from "@/models/BookChange";
 /**
  * 演習 6-2 データアクセスとサービスを実装する
  * 図書リポジトリインターフェース
@@ -24,4 +25,10 @@ export interface IBookRepository {
      * @returns 登録された図書（非同期）
      */
     register(book: BookRegistration): Promise<Book>;
+    /**
+     * 図書を変更する
+     * @param book
+     */
+    change(book: BookChange): Promise<Book>;
+    getById(bookUuid: string): Promise<Book>;
 }

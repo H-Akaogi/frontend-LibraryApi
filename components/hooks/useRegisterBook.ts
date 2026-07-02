@@ -65,6 +65,13 @@ export const useRegisterBook = () => {
             // stockだけ数値に変換する
             [name]: name === "stock" ? Number(value) : value
         }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: "",
+            submit: "",
+            system: "",
+        }));
     }, []);
 
     // --- カテゴリ選択時の処理 ---
@@ -90,7 +97,7 @@ export const useRegisterBook = () => {
         } catch (error: any) {
             setErrors((prev) => ({
                 ...prev,
-                submit: error.message
+                title: error.message || "図書の登録に失敗しました。"
             }));
 
             return null;
