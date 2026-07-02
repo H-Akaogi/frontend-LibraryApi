@@ -26,8 +26,8 @@ export default function TopPage() {
         <div className="p-8 max-w-4xl mx-auto space-y-8">
 
             <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">トップメニュー</h1>
-                <p className="text-gray-500">操作したいメニューを選択してください</p>
+                <h1 className="text-3xl font-bold tracking-tight">蔵書を、いつでもどこでも</h1>
+                <p className="text-gray-500">蔵書の検索・登録・管理を、いつでもどこでも。</p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
