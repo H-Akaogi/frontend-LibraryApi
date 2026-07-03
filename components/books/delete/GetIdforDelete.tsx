@@ -16,6 +16,12 @@ import { AlertCircle } from "lucide-react";
 import { useSearchBook } from "@/components/hooks/useSearchBook";
 import { useRouter } from "next/navigation";
 import { BookDeletion } from "./BookDeletion";
+import {
+    Search,
+    Loader2,
+    Trash2,
+} from "lucide-react";
+
 export const GetIdforDelete = () => {
     const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
     const router = useRouter();
@@ -87,11 +93,22 @@ export const GetIdforDelete = () => {
                         />
 
                         <Button
+                            type="button"
                             onClick={handleSearchClick}
                             disabled={isLoading}
-                            className="px-8 h-12"
+                            className="px-8 h-12 bg-blue-200 hover:bg-blue-400 disabled:opacity-70"
                         >
-                            {isLoading ? "検索中..." : "検索"}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    検索中...
+                                </>
+                            ) : (
+                                <>
+                                    <Search className="mr-2 h-4 w-4" />
+                                    検索
+                                </>
+                            )}
                         </Button>
                     </div>
 
@@ -129,10 +146,10 @@ export const GetIdforDelete = () => {
                             <TableHeader>
                                 <TableRow className="bg-muted/50">
                                     <TableHead className="font-semibold text-foreground">書名</TableHead>
-                                    <TableHead className="font-semibold text-foreground text-right">著者名</TableHead>
+                                    <TableHead className="font-semibold text-foreground text-center">著者名</TableHead>
                                     <TableHead className="font-semibold text-foreground text-center">分類</TableHead>
-                                    <TableHead className="font-semibold text-foreground text-right">蔵書数</TableHead>
-                                    <TableHead className="font-semibold text-foreground text-right">操作</TableHead>
+                                    <TableHead className="font-semibold text-foreground text-center">蔵書数</TableHead>
+                                    <TableHead className="font-semibold text-foreground text-center">操作</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -153,15 +170,27 @@ export const GetIdforDelete = () => {
                                             {book.stock} <span className="text-muted-foreground text-xs">冊</span>
                                         </TableCell>
                                         <TableCell>
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                className="flex-1 h-10"
-                                                disabled={isLoading}
-                                                onClick={() => setSelectedBookId(book.bookId)}
-                                            >
-                                                削除
-                                            </Button>
+                                            <div className="flex justify-center">
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    className="flex-1 h-10 justify-center"
+                                                    disabled={isLoading}
+                                                    onClick={() => setSelectedBookId(book.bookId)}
+                                                >
+                                                    {isLoading ? (
+                                                        <>
+                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                            削除中...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Trash2 className="mr-2 h-4 w-4" />
+                                                            削除
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}

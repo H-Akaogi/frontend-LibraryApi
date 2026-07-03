@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { BookDashboard } from "@/components/common/DashBoad";
 import {
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import { Spinner } from "@/components/ui/spinner";
 import {
   AlertCircle,
   Info,
+  Plus,
   CheckCircle,
   XCircle,
   TriangleAlert,
@@ -24,7 +25,7 @@ import {
   Trash2,
   Pencil,
 } from "lucide-react";
-
+import { RecentBooks } from "@/components/common/ResentBooks";
 export default function HomePage() {
   // スピナー表示
   const router = useRouter();
@@ -52,7 +53,12 @@ export default function HomePage() {
             利用する機能を選択してください。
           </p>
         </div>
-
+        <div>
+          <BookDashboard />
+        </div>
+        <div>
+          <RecentBooks />
+        </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
           {/* メニュー4：図書検索 */}
           <Card
@@ -82,7 +88,7 @@ export default function HomePage() {
                     <Spinner className="h-6 w-6 text-blue-600" />
                   ) : (
                     <Search
-                      className="h-6 w-6"
+                      className="h-6 w-6 text-blue-600"
                     />
                   )}
                 </div>
@@ -133,15 +139,12 @@ export default function HomePage() {
           >
             <CardHeader>
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 transition-colors group-hover:bg-blue-100">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-50 transition-colors group-hover:bg-green-100">
                   {loadingPath === "/books/new" ? (
-                    <Spinner className="h-6 w-6 text-blue-600" />
+                    <Spinner className="h-6 w-6 text-green-600" />
                   ) : (
-                    <Image
-                      src="/icons/book-add.svg"
-                      alt="図書登録アイコン"
-                      width={28}
-                      height={28}
+                    <Plus
+                      className="h-6 w-6 text-green-600"
                     />
                   )}
                 </div>
@@ -158,7 +161,7 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
+              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-green-50 group-hover:text-green-700">
                 <span>
                   {loadingPath === "/books/new" ? "移動中..." : "登録画面へ"}
                 </span>
@@ -192,15 +195,12 @@ export default function HomePage() {
           >
             <CardHeader>
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 transition-colors group-hover:bg-blue-100">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-50 transition-colors group-hover:bg-orange-100">
                   {loadingPath === "/books/edit" ? (
-                    <Spinner className="h-6 w-6 text-blue-600" />
+                    <Spinner className="h-6 w-6 text-orange-600" />
                   ) : (
-                    <Image
-                      src="/icons/book-edit.svg"
-                      alt="図書変更アイコン"
-                      width={28}
-                      height={28}
+                    <Pencil
+                      className="h-6 w-6 text-orange-600"
                     />
                   )}
                 </div>
@@ -217,7 +217,7 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
+              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-orange-50 group-hover:text-orange-700">
                 <span>
                   {loadingPath === "/books/edit" ? "移動中..." : "変更画面へ"}
                 </span>
@@ -251,15 +251,12 @@ export default function HomePage() {
           >
             <CardHeader>
               <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 transition-colors group-hover:bg-blue-100">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl  transition-colors bg-red-50 group-hover:bg-red-100">
                   {loadingPath === "/books/delete" ? (
-                    <Spinner className="h-6 w-6 text-blue-600" />
+                    <Spinner className="h-6 w-6 text-red-600" />
                   ) : (
-                    <Image
-                      src="/icons/book-delete.svg"
-                      alt="図書削除アイコン"
-                      width={28}
-                      height={28}
+                    <Trash2
+                      className="h-6 w-6 text-red-600"
                     />
                   )}
                 </div>
@@ -276,7 +273,7 @@ export default function HomePage() {
             </CardHeader>
 
             <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
+              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-red-50 group-hover:text-red-700">
                 <span>
                   {loadingPath === "/books/delete" ? "移動中..." : "削除画面へ"}
                 </span>

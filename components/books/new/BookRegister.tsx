@@ -11,9 +11,13 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { AlertCircle, InfoIcon } from "lucide-react";
+import {
+    AlertCircle,
+    InfoIcon,
+    Loader2,
+    Pencil,
+} from "lucide-react";
 /**
  * 演習 8-12 図書登録画面コンポーネントを実装し動作確認する
  * 図書登録画面のUIコンポーネント
@@ -232,7 +236,7 @@ export const BookRegister = () => {
                     <div className="flex w-full gap-4 pt-4">
                         <Button
                             type="submit"
-                            className="flex-[2] h-10"
+                            className="flex-[2] h-10 bg-blue-200 hover:bg-blue-400 disabled:opacity-70"
                             disabled={isLoading || hasValidationError}>
                             {isLoading ? (
                                 <>
@@ -240,7 +244,10 @@ export const BookRegister = () => {
                                     登録中...
                                 </>
                             ) : (
-                                "登録"
+                                <>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    登録
+                                </>
                             )}
                         </Button>
 

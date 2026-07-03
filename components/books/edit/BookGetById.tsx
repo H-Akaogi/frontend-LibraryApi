@@ -16,6 +16,10 @@ import { AlertCircle } from "lucide-react";
 import { useSearchBook } from "@/components/hooks/useSearchBook";
 import { useRouter } from "next/navigation";
 import { BookEdition } from "./BookEdition";
+import {
+    Search,
+    Loader2,
+} from "lucide-react";
 
 export const BookGetById = () => {
     const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
@@ -88,11 +92,22 @@ export const BookGetById = () => {
                         />
 
                         <Button
+                            type="button"
                             onClick={handleSearchClick}
                             disabled={isLoading}
-                            className="px-8 h-12"
+                            className="px-8 h-12 bg-blue-200 hover:bg-blue-400 disabled:opacity-70"
                         >
-                            {isLoading ? "検索中..." : "検索"}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    検索中...
+                                </>
+                            ) : (
+                                <>
+                                    <Search className="mr-2 h-4 w-4" />
+                                    検索
+                                </>
+                            )}
                         </Button>
                     </div>
 

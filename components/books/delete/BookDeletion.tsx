@@ -3,7 +3,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BookCheckIcon, Loader2 } from "lucide-react";
+import {
+    BookCheckIcon,
+    Loader2,
+    Trash2
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { InfoIcon } from "lucide-react";
 import { useDeleteBook } from "@/components/hooks/useDeleteBook";
@@ -81,20 +85,6 @@ export const BookDeletion = ({ bookId, onClose }: BookDeletionProps) => {
                     {/* 削除ボタン */}
                     <div className="flex w-full gap-4 pt-4">
                         <Button
-                            type="submit"
-                            className="flex-[2] h-10"
-                            disabled={isLoading}>
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    削除中...
-                                </>
-                            ) : (
-                                "削除"
-                            )}
-                        </Button>
-
-                        <Button
                             type="button"
                             variant="outline"
                             className="flex-1 h-10"
@@ -103,6 +93,26 @@ export const BookDeletion = ({ bookId, onClose }: BookDeletionProps) => {
                         >
                             キャンセル
                         </Button>
+
+                        <Button
+                            type="submit"
+                            className="flex-[2] h-10"
+                            variant="destructive"
+                            disabled={isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    削除中...
+                                </>
+                            ) : (
+                                <>
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    削除
+                                </>
+                            )}
+                        </Button>
+
+
                     </div>
 
                 </form >
