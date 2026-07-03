@@ -1,9 +1,11 @@
-/**
- * 演習 5-5 ナビゲーションメニューで新しい共通ページを作成する
- * メニューのレイアウト
- */
 import Header from "./header";
 import Footer from "./footer";
+import { AppSidebar } from "@/components/common/app-sidebar";
+import {
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 export default function FrontMenuLayout({
     children,
@@ -11,19 +13,23 @@ export default function FrontMenuLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="flex flex-col min-h-screen bg-slate-50 font-sans">
-            {/* === ここからヘッダー === */}
-            <Header />
-            {/* === ここまで：ヘッダー === */}
+        <SidebarProvider>
+            <div className="flex min-h-screen w-full flex-col bg-slate-50 font-sans">
+                <Header />
 
-            {/* === ここに各ページのコンテンツ page.tsx が入る === */}
-            <main className="flex-1 container mx-auto p-4 md:p-8">
-                {children}
-            </main>
+                <div className="flex flex-1">
+                    <AppSidebar />
 
-            {/* === ここからフッター === */}
-            <Footer />
-            {/* === ここまで：フッター === */}
-        </div>
+                    <SidebarInset>
+                        <main className="flex-1 p-6">
+                            <SidebarTrigger className="mb-4" />
+                            {children}
+                        </main>
+                    </SidebarInset>
+                </div>
+
+                <Footer />
+            </div>
+        </SidebarProvider>
     );
 }

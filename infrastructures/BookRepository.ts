@@ -107,9 +107,7 @@ export class BookRepository implements IBookRepository {
         }
 
         const books = await response.json();
-
         const exists = books.some((book: any) => book.title === title);
-
         if (exists) {
             throw new Error("同じ図書名が既に登録されています。");
         }

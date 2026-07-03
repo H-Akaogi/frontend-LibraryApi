@@ -12,6 +12,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  AlertCircle,
+  Info,
+  CheckCircle,
+  XCircle,
+  TriangleAlert,
+  CircleHelp,
+  Search,
+  BookOpen,
+  Trash2,
+  Pencil,
+} from "lucide-react";
 
 export default function HomePage() {
   // スピナー表示
@@ -69,11 +81,8 @@ export default function HomePage() {
                   {loadingPath === "/books" ? (
                     <Spinner className="h-6 w-6 text-blue-600" />
                   ) : (
-                    <Image
-                      src="/icons/book-search.svg"
-                      alt="図書検索アイコン"
-                      width={28}
-                      height={28}
+                    <Search
+                      className="h-6 w-6"
                     />
                   )}
                 </div>

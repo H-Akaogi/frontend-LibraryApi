@@ -238,24 +238,6 @@ export const BookEdition = ({ bookId, onClose }: BookEditionProps) => {
 
                 </form >
             </div >
-
-            {/* ★ カスタムHookの isSuccess に応じてモーダルを表示 */}
-            {
-                isSuccess && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                        <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
-                            <h3 className="text-xl font-bold mb-4">変更完了</h3>
-                            <p className="text-gray-600 mb-8">図書の変更が完了しました。</p>
-                            <Button
-                                onClick={() => router.push("/books/edit")}
-                                // ユーザーが「確認」を押したタイミングで入力画面へ遷移する
-                                className="w-full">
-                                検索画面に戻る
-                            </Button>
-                        </div>
-                    </div>
-                )
-            }
         </>
     );
 };
