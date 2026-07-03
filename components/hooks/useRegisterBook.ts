@@ -85,6 +85,7 @@ export const useRegisterBook = () => {
     // --- [登録]ボタンクリック時にデータを永続化する ---
     const handleSubmit = useCallback(async (): Promise<Book | null> => {
         setIsLoading(true);
+        setErrors({});
 
         try {
             const result = await service.execute(formData);

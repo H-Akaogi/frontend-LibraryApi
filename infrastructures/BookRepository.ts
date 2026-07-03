@@ -83,8 +83,8 @@ export class BookRepository implements IBookRepository {
     async existsByName(name: string): Promise<void> {
         //const session = await getSession();
         //const token = (session as any)?.user?.token;
-        const params = new URLSearchParams({ bookName: name });
-        const response = await fetch(`/proxy-api/library/api/books/register/validate?${params.toString()}`, {
+        const params = new URLSearchParams({ title: name });
+        const response = await fetch(`/proxy-api/library/api/books/new?${params.toString()}`, {
             method: "GET",
             headers: {
                 //"Authorization": `Bearer ${token}`
@@ -208,5 +208,32 @@ export class BookRepository implements IBookRepository {
         }
         // 登録完了後、バックエンドから返却された完全な図書データ(UUID含む)を返す
         return await response.json();
+    }
+
+    /**
+ * 削除
+ * @param book 
+ * @returns 
+ */
+    public async deleteById(bookId: string): Promise<void> {
+        const response = await fetch(`/proxy-api/library/api/books/${bookId}`, {
+            method: "DELETE",
+            headers: {
+                //"Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(bookId) // DTOをJSON文字列に変換して送信する
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            if (errorData.message) {
+                throw new Error(errorData.message);
+            }
+            if (errorData.errors) {
+                const messages = Object.values(errorData.errors).flat().join("\n");
+                throw new Error(messages);
+            }
+            throw new Error(`図書の削除に失敗しました (Status: ${response.status})`);
+        }
     }
 }

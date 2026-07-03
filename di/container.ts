@@ -17,6 +17,8 @@ import { IRegisterBookService } from "@/interfaces/IRegisterBookService";
 import { RegisterBookService } from "@/services/RegisterBookService";
 import { IChangeBookService } from "@/interfaces/IChangeBookService";
 import { ChangeBookService } from "@/services/ChangeBookService";
+import { IDeleteBookService } from "@/interfaces/IDeleteBookService";
+import { DeleteBookService } from "@/services/DeleteBookService";
 /**
  * 演習 6-2 データアクセスとサービスを実装する
  * DIコンテナの初期化と依存関係の登録
@@ -58,5 +60,9 @@ container.bind<IRegisterBookService>(TYPES.IRegisterBookService).to(RegisterBook
  * 図書変更
  */
 container.bind<IChangeBookService>(TYPES.IChangeBookService).to(ChangeBookService);
+/**
+ * 図書削除
+ */
+container.bind<IDeleteBookService>(TYPES.IDeleteBookService).to(DeleteBookService);
 
 export { container };

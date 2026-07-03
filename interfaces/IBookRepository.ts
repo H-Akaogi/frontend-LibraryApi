@@ -13,10 +13,10 @@ export interface IBookRepository {
      */
     searchKeyword(keyword: string): Promise<Book[]>;
     /**
-         * 演習 8-8 リポジトリとDTOインターフェイスを実装する
-         * 図書の重複を検証する
-         * @param name 検証する図書名
-         */
+     * 演習 8-8 リポジトリとDTOインターフェイスを実装する
+     * 図書の重複を検証する
+     * @param name 検証する図書名
+     */
     existsByName(name: string): Promise<void>;
     /**
      * 演習 8-8 リポジトリとDTOインターフェイスを実装する
@@ -30,5 +30,9 @@ export interface IBookRepository {
      * @param book
      */
     change(book: BookChange): Promise<Book>;
-    getById(bookUuid: string): Promise<Book>;
+    getById(bookId: string): Promise<Book>;
+    /**
+     * 図書を削除する
+     */
+    deleteById(bookId: string): Promise<void>;
 }

@@ -23,6 +23,9 @@ export const TYPES = {
     /**
      * 図書変更
      */
-    IChangeBookService: Symbol.for("IChangeBookService")
-
+    IChangeBookService: Symbol.for("IChangeBookService"),
+    /**
+     * 図書削除
+     */
+    IDeleteBookService: Symbol.for("IDeleteBookService")
 };
