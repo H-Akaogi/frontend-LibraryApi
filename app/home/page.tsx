@@ -13,20 +13,16 @@ import {
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import {
-  AlertCircle,
-  Info,
   Plus,
-  CheckCircle,
-  XCircle,
-  TriangleAlert,
-  CircleHelp,
   Search,
-  BookOpen,
   Trash2,
   Pencil,
 } from "lucide-react";
-import { RecentBooks } from "@/components/common/ResentBooks";
+import { RecentBooks } from "@/components/common/RecentBooks";
 import dynamic from "next/dynamic";
+import { NoticeCard } from "@/components/common/NoticeForHome";
+import { AccessCard } from "@/components/common/AccessCard";
+import { ShareButton } from "@/components/common/ShareButton";
 
 export default function HomePage() {
   // スピナー表示
@@ -63,6 +59,7 @@ export default function HomePage() {
             利用する機能を選択してください。
           </p>
         </div>
+        <ShareButton />
         <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
           {/* 左側 */}
           <div className="space-y-6">
@@ -300,10 +297,15 @@ export default function HomePage() {
                 </CardContent>
               </Card>
             </div>
+            <AccessCard />
           </div>
+
           {/* 右側 */}
           <aside className="space-y-6">
+            {/* カレンダー */}
             <LibraryCalendar />
+            {/* お知らせ */}
+            <NoticeCard />
           </aside>
         </div>
       </div>

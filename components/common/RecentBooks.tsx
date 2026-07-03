@@ -1,4 +1,5 @@
 "use client";
+import { mockBooks } from "@/Mocks/MockBooks";
 import { useSearchBook } from "../hooks/useSearchBook";
 import {
     Card,
@@ -18,9 +19,7 @@ import {
     TableCell,
 } from "../ui/table";
 export const RecentBooks = () => {
-    const { books } = useSearchBook();
-
-    const recentBooks = books.slice(0, 5);
+    const recentBooks = mockBooks.slice(0, 5);
     return (
         <Card>
             <CardHeader>
@@ -43,7 +42,7 @@ export const RecentBooks = () => {
 
                     <TableBody>
                         {recentBooks.map((book) => (
-                            <TableRow key={book.bookId}>
+                            <TableRow key={book.bookUuid}>
                                 <TableCell>{book.title}</TableCell>
                                 <TableCell>{book.author}</TableCell>
                                 <TableCell>{book.category.name}</TableCell>

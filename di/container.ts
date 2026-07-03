@@ -2,7 +2,6 @@ import { IBookRepository } from "@/interfaces/IBookRepository";
 import { ISearchBookService } from "@/interfaces/ISearchBookService";
 import { Container } from "inversify";
 import { TYPES } from "./types";
-import { MockBookRepository } from "@/infrastructures/MockBookRepository";
 import { SearchBookService } from "@/services/SearchBookService";
 import { BookRepository } from "@/infrastructures/BookRepository";
 /*import { IRegisterUserService } from "@/interfaces/IRegisterUserService";
