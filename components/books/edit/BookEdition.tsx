@@ -1,5 +1,5 @@
 "use client";
-
+import { toast } from "sonner";
 import { useChangeBook } from "@/components/hooks/useChangeBook";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,9 +13,10 @@ import { InfoIcon } from "lucide-react";
  */
 type BookEditionProps = {
     bookId: string;
+    onClose: () => void;
 };
 
-export const BookEdition = ({ bookId }: BookEditionProps) => {
+export const BookEdition = ({ bookId, onClose }: BookEditionProps) => {
     const router = useRouter();
 
     // カスタムHookから状態と関数を取得する
@@ -36,8 +37,11 @@ export const BookEdition = ({ bookId }: BookEditionProps) => {
         if (hasValidationError) {
             return;
         }
-        await handleSubmit(); // Hookの送信処理を実行する
+        const isChanged = await handleSubmit(); // Hookの送信処理を実行する
+        toast.success("図書を変更しました。");
+        router.push("/home");
     };
+
     const isTitleOverLimit = formData.title.length > 50;
     const isTitleBlank = formData.title.length === 0;
     const isAuthorOverLimit = formData.author.length > 30;

@@ -15,8 +15,10 @@ import {
 import { AlertCircle } from "lucide-react";
 import { useSearchBook } from "@/components/hooks/useSearchBook";
 import { useRouter } from "next/navigation";
+import { BookEdition } from "./BookEdition";
 
 export const BookGetById = () => {
+    const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
     const router = useRouter();
     // 検索ボックスに入力されたキーワード文字列を保持するローカルState
     const [keyword, setKeyword] = useState<string>("");
@@ -157,7 +159,7 @@ export const BookGetById = () => {
                                                 variant="outline"
                                                 className="flex-1 h-10"
                                                 disabled={isLoading}
-                                                onClick={() => router.push(`/books/edit/${book.bookId}`)}
+                                                onClick={() => setSelectedBookId(book.bookId)}
                                             >
                                                 選択
                                             </Button>
@@ -169,6 +171,16 @@ export const BookGetById = () => {
                     </div>
                 )}
             </div>
+            {selectedBookId && (
+                <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm">
+                    <div className="w-full max-w-2xl rounded-t-2xl bg-white p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+                        <BookEdition
+                            bookId={selectedBookId}
+                            onClose={() => setSelectedBookId(null)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

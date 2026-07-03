@@ -31,6 +31,7 @@ export const BookRegister = () => {
         handleChange,
         handleCategoryChange,
         handleSubmit,
+        handleNameBlur,
         resetForm
     } = useRegisterBook();
 
@@ -112,6 +113,7 @@ export const BookRegister = () => {
                             type="text"
                             value={formData.author}
                             onChange={handleChange}
+                            onBlur={handleNameBlur} // フォーカスアウト時に検証実行
                             placeholder="例：山田太郎"
                             required
                             minLength={1}

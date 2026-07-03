@@ -82,7 +82,7 @@ export const BookDeletion = ({ bookId, onClose }: BookDeletionProps) => {
                     <div className="flex w-full gap-4 pt-4">
                         <Button
                             type="submit"
-                            className="flex-[2] h-10 bg-red-50 text-white"
+                            className="flex-[2] h-10"
                             disabled={isLoading}>
                             {isLoading ? (
                                 <>
@@ -99,7 +99,7 @@ export const BookDeletion = ({ bookId, onClose }: BookDeletionProps) => {
                             variant="outline"
                             className="flex-1 h-10"
                             disabled={isLoading}
-                            onClick={() => router.push("/books/delete")}
+                            onClick={onClose}
                         >
                             キャンセル
                         </Button>

@@ -82,6 +82,26 @@ export const useRegisterBook = () => {
         }));
     }, []);
 
+    // --- 書名入力終了時に重複を検証する ---
+    const handleNameBlur = useCallback(async () => {
+        if (!formData.title) return; // 空の場合は検証しない
+        try {
+            // 検証前にエラーをクリアする
+            setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors.title;
+                return newErrors;
+            });
+            await service.validateBookName(formData.title);
+        } catch (error: any) {
+            // 重複エラーなどを title のエラーとしてセットする
+            setErrors((prev) => ({
+                ...prev,
+                title: error.message || "図書名の検証に失敗しました。",
+            }));
+        }
+    }, [formData.title]);
+
     // --- [登録]ボタンクリック時にデータを永続化する ---
     const handleSubmit = useCallback(async (): Promise<Book | null> => {
         setIsLoading(true);
@@ -116,6 +136,7 @@ export const useRegisterBook = () => {
         handleChange,
         handleCategoryChange,
         handleSubmit,
+        handleNameBlur,
         resetForm
     };
 };

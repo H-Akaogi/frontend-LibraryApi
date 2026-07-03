@@ -78,13 +78,13 @@ export class BookRepository implements IBookRepository {
     /**
      * 演習 8-9 リポジトリの実装を作成する
      * 図書の重複を検証する
-     * @param name 検証する図書名
+     * @param title 検証する図書名
      */
-    async existsByName(name: string): Promise<void> {
+    async existsByName(title: string): Promise<void> {
         //const session = await getSession();
         //const token = (session as any)?.user?.token;
-        const params = new URLSearchParams({ title: name });
-        const response = await fetch(`/proxy-api/library/api/books/new?${params.toString()}`, {
+        const params = new URLSearchParams({ Keyword: title });
+        const response = await fetch(`/proxy-api/library/api/books?${params.toString()}`, {
             method: "GET",
             headers: {
                 //"Authorization": `Bearer ${token}`
@@ -93,14 +93,25 @@ export class BookRepository implements IBookRepository {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+
             if (errorData.message) {
                 throw new Error(errorData.message);
             }
+
             if (errorData.errors) {
                 const messages = Object.values(errorData.errors).flat().join("\n");
                 throw new Error(messages);
             }
+
             throw new Error("図書名の検証に失敗しました。");
+        }
+
+        const books = await response.json();
+
+        const exists = books.some((book: any) => book.title === title);
+
+        if (exists) {
+            throw new Error("同じ図書名が既に登録されています。");
         }
     }
 
