@@ -21,6 +21,8 @@ export const useChangeBook = (bookId: string) => {
         author: "",
         stock: 0,
     });
+    // 最初に取得したタイトル
+    const [originalTitle, setOriginalTitle] = useState("");
 
     // 表示専用のカテゴリ名
     const [categoryName, setCategoryName] = useState<string>("");
@@ -53,7 +55,7 @@ export const useChangeBook = (bookId: string) => {
                     author: book.author,
                     stock: book.stock,
                 });
-
+                setOriginalTitle(book.title);
                 setCategoryName(book.category.name);
             } catch (error: any) {
                 setErrors((prev) => ({
@@ -86,14 +88,48 @@ export const useChangeBook = (bookId: string) => {
             system: "",
         }));
     }, []);
+    // --- 書名入力終了時に重複を検証する ---
+    const handleTitleBlur = async () => {
+        const title = formData.title.trim();
 
+        setErrors((prev) => {
+            const newErrors = { ...prev };
+            delete newErrors.title;
+            return newErrors;
+        });
+
+        if (!title) {
+            return;
+        }
+
+        if (title.length > 50) {
+            return;
+        }
+
+        // ここが重要：
+        // 元のタイトルと同じなら、自分自身なので重複チェックしない
+        if (title === originalTitle) {
+            return;
+        }
+
+        try {
+            await service.validateBookName(title);
+        } catch (error: any) {
+            setErrors((prev) => ({
+                ...prev,
+                title: error.message || "既に登録されている書名です。",
+            }));
+        }
+    };
     /**
      * 変更処理
      */
     const handleSubmit = useCallback(async (): Promise<Book | null> => {
         setIsLoading(true);
         setErrors({});
-
+        if (formData.title.trim() !== originalTitle) {
+            await service.validateBookName(formData.title.trim());
+        }
         try {
             const result = await service.execute(formData);
 
@@ -129,6 +165,7 @@ export const useChangeBook = (bookId: string) => {
         isSuccess,
         handleChange,
         handleSubmit,
+        handleTitleBlur,
         closeSuccess,
     };
 };

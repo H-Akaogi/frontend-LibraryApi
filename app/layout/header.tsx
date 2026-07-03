@@ -35,7 +35,7 @@ export default function Header() {
                     <h1>
                         <Link
                             href="/"
-                            className="flex items-center gap-3 text-xl font-bold text-blue-900"
+                            className="ml-25 flex items-center gap-3 text-xl font-bold text-blue-900"
                         >
                             <img
                                 src="/icons/bookstand.svg"

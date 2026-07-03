@@ -28,6 +28,7 @@ export const BookEdition = ({ bookId, onClose }: BookEditionProps) => {
         isSuccess,
         handleChange,
         handleSubmit,
+        handleTitleBlur,
         closeSuccess
     } = useChangeBook(bookId);
 
@@ -52,10 +53,13 @@ export const BookEdition = ({ bookId, onClose }: BookEditionProps) => {
     const hasValidationError =
         isTitleBlank ||
         isTitleOverLimit ||
+        !!errors.title ||
         isAuthorBlank ||
         isAuthorOverLimit ||
+        !!errors.author ||
         isStockBlank ||
-        isStockInvalid;
+        isStockInvalid ||
+        !!errors.stock;
 
     if (isLoading && !formData.title) {
         return (
@@ -81,6 +85,7 @@ export const BookEdition = ({ bookId, onClose }: BookEditionProps) => {
                             name="title"
                             value={formData.title ?? ""}
                             onChange={handleChange}
+                            onBlur={handleTitleBlur}
                             required
                             minLength={1}
                             className={`w-full h-10 ${isTitleBlank || isTitleOverLimit || errors.title

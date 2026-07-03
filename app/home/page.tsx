@@ -26,6 +26,8 @@ import {
   Pencil,
 } from "lucide-react";
 import { RecentBooks } from "@/components/common/ResentBooks";
+import dynamic from "next/dynamic";
+
 export default function HomePage() {
   // スピナー表示
   const router = useRouter();
@@ -36,7 +38,15 @@ export default function HomePage() {
     setLoadingPath(path);
     router.push(path);
   };
-
+  const LibraryCalendar = dynamic(
+    () =>
+      import("@/components/common/LibCalender").then(
+        (mod) => mod.LibraryCalendar
+      ),
+    {
+      ssr: false,
+    }
+  );
   // 他のカードを押せないようにするための判定
   const isAnyLoading = loadingPath !== null;
 
@@ -53,238 +63,252 @@ export default function HomePage() {
             利用する機能を選択してください。
           </p>
         </div>
-        <div>
-          <BookDashboard />
-        </div>
-        <div>
-          <RecentBooks />
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
-          {/* メニュー4：図書検索 */}
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              if (!isAnyLoading) {
-                handleNavigate("/books");
-              }
-            }}
-            onKeyDown={(event) => {
-              if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
-                handleNavigate("/books");
-              }
-            }}
-            className={`
-              group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
-              transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
-              focus:outline-none focus:ring-2 focus:ring-blue-300
-              ${isAnyLoading && loadingPath !== "/books" ? "pointer-events-none opacity-50" : ""}
-            `}
-          >
-            <CardHeader>
-              <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 transition-colors group-hover:bg-blue-100">
-                  {loadingPath === "/books" ? (
-                    <Spinner className="h-6 w-6 text-blue-600" />
-                  ) : (
-                    <Search
-                      className="h-6 w-6 text-blue-600"
-                    />
-                  )}
-                </div>
+        <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+          {/* 左側 */}
+          <div className="space-y-6">
+            <div>
+              <BookDashboard />
+            </div>
+            <div>
+              <RecentBooks />
+            </div>
+            {/* メニューカードたち */}
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
 
-                <div className="space-y-1">
-                  <CardTitle className="text-lg font-bold text-slate-900">
-                    図書検索
-                  </CardTitle>
-                  <CardDescription className="leading-relaxed text-slate-500">
-                    書名のキーワードで蔵書を検索します。
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
 
-            <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
-                <span>
-                  {loadingPath === "/books" ? "移動中..." : "検索画面へ"}
-                </span>
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              {/* メニュー4：図書検索 */}
+              <Card
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (!isAnyLoading) {
+                    handleNavigate("/books");
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
+                    handleNavigate("/books");
+                  }
+                }}
+                className={`
+                  group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
+                  transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
+                  focus:outline-none focus:ring-2 focus:ring-blue-300
+                  ${isAnyLoading && loadingPath !== "/books" ? "pointer-events-none opacity-50" : ""}
+                `}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 transition-colors group-hover:bg-blue-100">
+                      {loadingPath === "/books" ? (
+                        <Spinner className="h-6 w-6 text-blue-600" />
+                      ) : (
+                        <Search
+                          className="h-6 w-6 text-blue-600"
+                        />
+                      )}
+                    </div>
 
-          {/* メニュー5：図書登録 */}
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              if (!isAnyLoading) {
-                handleNavigate("/books/new");
-              }
-            }}
-            onKeyDown={(event) => {
-              if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
-                handleNavigate("/books/new");
-              }
-            }}
-            className={`
-              group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
-              transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
-              focus:outline-none focus:ring-2 focus:ring-blue-300
-              ${isAnyLoading && loadingPath !== "/books/new" ? "pointer-events-none opacity-50" : ""}
-            `}
-          >
-            <CardHeader>
-              <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-50 transition-colors group-hover:bg-green-100">
-                  {loadingPath === "/books/new" ? (
-                    <Spinner className="h-6 w-6 text-green-600" />
-                  ) : (
-                    <Plus
-                      className="h-6 w-6 text-green-600"
-                    />
-                  )}
-                </div>
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-bold text-slate-900">
+                        図書検索
+                      </CardTitle>
+                      <CardDescription className="leading-relaxed text-slate-500">
+                        書名のキーワードで蔵書を検索します。
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
 
-                <div className="space-y-1">
-                  <CardTitle className="text-lg font-bold text-slate-900">
-                    図書登録
-                  </CardTitle>
-                  <CardDescription className="leading-relaxed text-slate-500">
-                    新しい図書を蔵書に登録します。
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-blue-50 group-hover:text-blue-700">
+                    <span>
+                      {loadingPath === "/books" ? "移動中..." : "検索画面へ"}
+                    </span>
+                    <span className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-            <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-green-50 group-hover:text-green-700">
-                <span>
-                  {loadingPath === "/books/new" ? "移動中..." : "登録画面へ"}
-                </span>
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              {/* メニュー5：図書登録 */}
+              <Card
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (!isAnyLoading) {
+                    handleNavigate("/books/new");
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
+                    handleNavigate("/books/new");
+                  }
+                }}
+                className={`
+                    group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
+                    transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
+                    focus:outline-none focus:ring-2 focus:ring-blue-300
+                    ${isAnyLoading && loadingPath !== "/books/new" ? "pointer-events-none opacity-50" : ""}
+                  `}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-green-50 transition-colors group-hover:bg-green-100">
+                      {loadingPath === "/books/new" ? (
+                        <Spinner className="h-6 w-6 text-green-600" />
+                      ) : (
+                        <Plus
+                          className="h-6 w-6 text-green-600"
+                        />
+                      )}
+                    </div>
 
-          {/* メニュー6：図書変更 */}
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              if (!isAnyLoading) {
-                handleNavigate("/books/edit");
-              }
-            }}
-            onKeyDown={(event) => {
-              if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
-                handleNavigate("/books/edit");
-              }
-            }}
-            className={`
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-bold text-slate-900">
+                        図書登録
+                      </CardTitle>
+                      <CardDescription className="leading-relaxed text-slate-500">
+                        新しい図書を蔵書に登録します。
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+
+                <CardContent>
+                  <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-green-50 group-hover:text-green-700">
+                    <span>
+                      {loadingPath === "/books/new" ? "移動中..." : "登録画面へ"}
+                    </span>
+                    <span className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* メニュー6：図書変更 */}
+              <Card
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (!isAnyLoading) {
+                    handleNavigate("/books/edit");
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
+                    handleNavigate("/books/edit");
+                  }
+                }}
+                className={`
               group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
               transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
               focus:outline-none focus:ring-2 focus:ring-blue-300
               ${isAnyLoading && loadingPath !== "/books/edit" ? "pointer-events-none opacity-50" : ""}
             `}
-          >
-            <CardHeader>
-              <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-50 transition-colors group-hover:bg-orange-100">
-                  {loadingPath === "/books/edit" ? (
-                    <Spinner className="h-6 w-6 text-orange-600" />
-                  ) : (
-                    <Pencil
-                      className="h-6 w-6 text-orange-600"
-                    />
-                  )}
-                </div>
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-50 transition-colors group-hover:bg-orange-100">
+                      {loadingPath === "/books/edit" ? (
+                        <Spinner className="h-6 w-6 text-orange-600" />
+                      ) : (
+                        <Pencil
+                          className="h-6 w-6 text-orange-600"
+                        />
+                      )}
+                    </div>
 
-                <div className="space-y-1">
-                  <CardTitle className="text-lg font-bold text-slate-900">
-                    図書変更
-                  </CardTitle>
-                  <CardDescription className="leading-relaxed text-slate-500">
-                    検索して選んだ図書の情報を変更します。
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-bold text-slate-900">
+                        図書変更
+                      </CardTitle>
+                      <CardDescription className="leading-relaxed text-slate-500">
+                        検索して選んだ図書の情報を変更します。
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
 
-            <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-orange-50 group-hover:text-orange-700">
-                <span>
-                  {loadingPath === "/books/edit" ? "移動中..." : "変更画面へ"}
-                </span>
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+                <CardContent>
+                  <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-orange-50 group-hover:text-orange-700">
+                    <span>
+                      {loadingPath === "/books/edit" ? "移動中..." : "変更画面へ"}
+                    </span>
+                    <span className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-          {/* メニュー7：図書削除 */}
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              if (!isAnyLoading) {
-                handleNavigate("/books/delete");
-              }
-            }}
-            onKeyDown={(event) => {
-              if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
-                handleNavigate("/books/delete");
-              }
-            }}
-            className={`
+              {/* メニュー7：図書削除 */}
+              <Card
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (!isAnyLoading) {
+                    handleNavigate("/books/delete");
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (!isAnyLoading && (event.key === "Enter" || event.key === " ")) {
+                    handleNavigate("/books/delete");
+                  }
+                }}
+                className={`
               group cursor-pointer rounded-2xl border border-slate-200 bg-white shadow-sm
               transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md
               focus:outline-none focus:ring-2 focus:ring-blue-300
               ${isAnyLoading && loadingPath !== "/books/delete" ? "pointer-events-none opacity-50" : ""}
             `}
-          >
-            <CardHeader>
-              <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl  transition-colors bg-red-50 group-hover:bg-red-100">
-                  {loadingPath === "/books/delete" ? (
-                    <Spinner className="h-6 w-6 text-red-600" />
-                  ) : (
-                    <Trash2
-                      className="h-6 w-6 text-red-600"
-                    />
-                  )}
-                </div>
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl  transition-colors bg-red-50 group-hover:bg-red-100">
+                      {loadingPath === "/books/delete" ? (
+                        <Spinner className="h-6 w-6 text-red-600" />
+                      ) : (
+                        <Trash2
+                          className="h-6 w-6 text-red-600"
+                        />
+                      )}
+                    </div>
 
-                <div className="space-y-1">
-                  <CardTitle className="text-lg font-bold text-slate-900">
-                    図書削除
-                  </CardTitle>
-                  <CardDescription className="leading-relaxed text-slate-500">
-                    検索して選んだ図書を蔵書から削除します。
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
+                    <div className="space-y-1">
+                      <CardTitle className="text-lg font-bold text-slate-900">
+                        図書削除
+                      </CardTitle>
+                      <CardDescription className="leading-relaxed text-slate-500">
+                        検索して選んだ図書を蔵書から削除します。
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
 
-            <CardContent>
-              <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-red-50 group-hover:text-red-700">
-                <span>
-                  {loadingPath === "/books/delete" ? "移動中..." : "削除画面へ"}
-                </span>
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+                <CardContent>
+                  <div className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 transition-colors group-hover:bg-red-50 group-hover:text-red-700">
+                    <span>
+                      {loadingPath === "/books/delete" ? "移動中..." : "削除画面へ"}
+                    </span>
+                    <span className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          {/* 右側 */}
+          <aside className="space-y-6">
+            <LibraryCalendar />
+          </aside>
         </div>
       </div>
+
     </div>
+
   );
 }
